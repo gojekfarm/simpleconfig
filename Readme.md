@@ -19,6 +19,28 @@ Where ConfigA is a structure holding the information for Config1.
 # Setting Config
 
 For example
+
+```
+	type DBConfig struct {
+		Host     string
+		Port     int
+		MaxConns int
+	}
+
+	type TestConfig struct {
+		Database DBConfig
+	}
+
+	testConfig := TestConfig{}
+
+	os.Setenv("DATABASE_HOST", "localhost")
+	os.Setenv("DATABASE_PORT", "5432")
+	os.Setenv("DATABASE_MAXCONNS", "35")
+
+```
+
+Multilevel example
+
 ```
 	type singleLevel struct {
 		F string
@@ -39,12 +61,10 @@ For example
 		D doubleLevel
 	}
 
-```
-
 To set TestConfig.A you set the environment variable `A`
 To set TestConfig.C.F you set environment variable `C_F`
 To set TestConfig.D.E.K you set environment variable `D_E_K`
-
+```
 # Code
 
 ```
