@@ -45,10 +45,15 @@ func populateValue(key string, appConfig interface{}, value string) error {
 	}
 
 	keyTree := strings.Split(key, "_")
-	v := reflect.ValueOf(appConfig).Elem().FieldByName(keyTree[0])
+	v := reflect.ValueOf(appConfig).Elem().FieldByNameFunc(
+		func(s string) bool {
+			return (strings.ToUpper(s) == keyTree[0])
+		})
 	if len(keyTree) > 1 {
 		for _, k := range keyTree[1:] {
-			v = v.FieldByName(k)
+			v = v.FieldByNameFunc(func(s string) bool {
+				return (strings.ToUpper(s) == k)
+			})
 		}
 	}
 	if v.Type().Kind() == reflect.Int {

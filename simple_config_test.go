@@ -167,3 +167,28 @@ func TestLoadConfig(t *testing.T) {
 	assert.True(t, testConfig.D.E.K, "Invalid A value")
 
 }
+
+func TestLoadRealisticConfig(t *testing.T) {
+	type DBConfig struct {
+		Host     string
+		Port     int
+		MaxConns int
+	}
+
+	type TestConfig struct {
+		Database DBConfig
+	}
+
+	testConfig := TestConfig{}
+
+	os.Setenv("DATABASE_HOST", "localhost")
+	os.Setenv("DATABASE_PORT", "5432")
+	os.Setenv("DATABASE_MAXCONNS", "35")
+
+	LoadConfig(&testConfig)
+
+	assert.Equal(t, "localhost", testConfig.Database.Host, "Incorrect Database Host")
+	assert.Equal(t, 5432, testConfig.Database.Port, "Incorrect Database Host")
+	assert.Equal(t, 35, testConfig.Database.MaxConns, "Incorrect Database Host")
+
+}
