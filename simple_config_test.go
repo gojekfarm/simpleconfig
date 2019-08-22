@@ -166,6 +166,13 @@ func TestLoadConfig(t *testing.T) {
 	assert.Equal(t, 15, testConfig.D.E.G, "Invalid A value")
 	assert.True(t, testConfig.D.E.K, "Invalid A value")
 
+	os.Unsetenv("C_F")
+	os.Unsetenv("C_G")
+	os.Unsetenv("C_K")
+	os.Unsetenv("D_E_F")
+	os.Unsetenv("D_E_G")
+	os.Unsetenv("D_E_K")
+
 }
 
 func TestLoadRealisticConfig(t *testing.T) {
@@ -190,5 +197,58 @@ func TestLoadRealisticConfig(t *testing.T) {
 	assert.Equal(t, "localhost", testConfig.Database.Host, "Incorrect Database Host")
 	assert.Equal(t, 5432, testConfig.Database.Port, "Incorrect Database Host")
 	assert.Equal(t, 35, testConfig.Database.MaxConns, "Incorrect Database Host")
+
+	os.Unsetenv("DATABASE_HOST")
+	os.Unsetenv("DATABASE_PORT")
+	os.Unsetenv("DATABASE_MAXCONNS")
+
+}
+
+func TestLoadConfigTagDefaults(t *testing.T) {
+	type DBConfig struct {
+		Host     string `d:"localhost"`
+		Port     int    `d:"5432"`
+		MaxConns int    `d:"35"`
+	}
+
+	type TestConfig struct {
+		Database DBConfig
+	}
+
+	testConfig := TestConfig{}
+
+	LoadConfig(&testConfig)
+
+	assert.Equal(t, "localhost", testConfig.Database.Host, "Incorrect Database Host")
+	assert.Equal(t, 5432, testConfig.Database.Port, "Incorrect Database Host")
+	assert.Equal(t, 35, testConfig.Database.MaxConns, "Incorrect Database Host")
+
+}
+
+// Test that Environment variables over-ride defaults even when empty.
+func TestLoadConfigTagSetEnvironmentVsDefaults(t *testing.T) {
+	type DBConfig struct {
+		Host     string `d:"localhost"`
+		Port     int    `d:"5432"`
+		MaxConns int    `d:"35"`
+	}
+
+	type TestConfig struct {
+		Database DBConfig
+	}
+
+	testConfig := TestConfig{}
+
+	os.Setenv("DATABASE_HOST", "")
+	os.Setenv("DATABASE_PORT", "9090")
+
+	LoadConfig(&testConfig)
+
+	assert.Equal(t, "", testConfig.Database.Host, "Incorrect Database Host")
+	assert.Equal(t, 9090, testConfig.Database.Port, "Incorrect Database Host")
+	assert.Equal(t, 35, testConfig.Database.MaxConns, "Incorrect Database Host")
+
+	os.Unsetenv("DATABASE_HOST")
+	os.Unsetenv("DATABASE_PORT")
 
 }

@@ -65,6 +65,19 @@ To set TestConfig.A you set the environment variable `A`
 To set TestConfig.C.F you set environment variable `C_F`
 To set TestConfig.D.E.K you set environment variable `D_E_K`
 ```
+# Defaults
+
+To add a default just add it as an annotation
+```
+	type DBConfig struct {
+		Host     string `d:"localhost"`
+		Port     int    `d:"5432"`
+		MaxConns int    `d:"35"`
+	}
+```
+
+Please Note the syntax here `d:"default"`. The `""` are important in the value as that is the syntax supported by reflect tag library.
+
 # Code
 
 ```
