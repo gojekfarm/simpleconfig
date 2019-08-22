@@ -78,6 +78,16 @@ To add a default just add it as an annotation
 
 Please Note the syntax here `d:"default"`. The `""` are important in the value as that is the syntax supported by reflect tag library.
 
+# Supported data types
+
+Presently
+1. string
+2. int
+3. bool
+
+More types can be added by modifying the functions `populateDefaultValue` and `populateValue` Look for 
+`/* Add a new type here! */`
+
 # Code
 
 ```

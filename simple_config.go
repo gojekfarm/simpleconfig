@@ -73,6 +73,7 @@ func populateDefaultValue(key string, appConfig interface{}) error {
 
 	defaultValue = localDefaultValue
 
+	/* Add a new type here! */
 	if v.Type().Kind() == reflect.Int {
 		writeValue, err := strconv.Atoi(defaultValue)
 		if err == nil {
@@ -110,6 +111,8 @@ func populateValue(key string, appConfig interface{}, value string) error {
 			})
 		}
 	}
+
+	/* Add a new type here! */
 	if v.Type().Kind() == reflect.Int {
 		writeValue, err := strconv.Atoi(value)
 		if err == nil {
